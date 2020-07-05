@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { json } = require("express");
 
 let notes = []
 module.exports = function(app) {
@@ -50,12 +51,15 @@ module.exports = function(app) {
         if (error) {
           return console.log("ERROR:", error);
         }
-        const parseData = JSON.parse(data)
-        var index = parseData.findIndex(function(notes){
-          return notes.id === id 
+        let parseData = JSON.parse(data)
+       
+        parseData = parseData.filter((note)=> note.id!== parseInt(req.params.id))
+        fs.writeFile("./db/db.json", JSON.stringify(parseData), function(error, data){
+          res.json("done")
+
         })
       })
-      res.send ("")
+     
     })
     
 
